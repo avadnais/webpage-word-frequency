@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.Set;
+
 class HashTable {
     static final int INITIAL_CAP = (16);
 
@@ -91,6 +94,17 @@ class HashTable {
             }
         }
     }
+
+    Set<String> keySet(){
+        Set<String> keys = new HashSet<String>();
+        for(int i = 0; i < table.length; i++){
+            if(table[i] != null)
+                keys.add(table[i].word);
+        }
+        return keys;
+
+    }
+
 
   /*  public void writeObject(ObjectOutputStream s) throws IOException {
         //s.defaultWriteObject(this);

@@ -26,10 +26,6 @@ public class URLReader {
         String body = doc.body().text();
 
 
-
-        System.out.printf("Title: %s%n", title);
-        System.out.printf("Body: %s", body);
-
         return title + "\n" + body;
     }
 }
