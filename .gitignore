@@ -1,2 +1,2 @@
-*.xml
-*.html
+.idea/
+.DS_store
