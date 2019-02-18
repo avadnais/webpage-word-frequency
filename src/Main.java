@@ -12,7 +12,7 @@ public class Main {
             @Override
             public void run() {
                 JFrame frame = new MainFrame("Webpage Similarity");
-                frame.setSize(500, 500);
+                frame.setSize(1000, 600);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setVisible(true);
             }

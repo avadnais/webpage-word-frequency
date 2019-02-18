@@ -9,6 +9,7 @@ public class MainFrame extends JFrame {
     private InputPanel inputPanel;
     private OutputPanel outputPanel;
 
+    ScrollPane scrollPane;
 
 
     public MainFrame(String title){
@@ -26,7 +27,7 @@ public class MainFrame extends JFrame {
         Container c = getContentPane();
 
         c.add(inputPanel,BorderLayout.NORTH);
-        c.add(outputPanel,BorderLayout.CENTER);
+        //c.add(outputPanel,BorderLayout.CENTER);
 
 
         //add behavior
@@ -34,16 +35,19 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    c.remove(outputPanel);
+                    outputPanel = new OutputPanel();
                     HashTable ht = URLReader.createTable(inputPanel.textField.getText());
-                    outputPanel.populate(ht);
+                    outputPanel.populate(ht, outputPanel.table1);
                     ArrayList<HashTable> tables = URLReader.readAll();
-                    WebpageSimilarity.closestTo(tables, ht);
+                    HashTable closestTo = WebpageSimilarity.closestTo(tables, ht);
+                    outputPanel.populate(closestTo, outputPanel.table2);
+                    c.add(outputPanel);
+                    c.validate();
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
             }
         });
-
-
     }
 }

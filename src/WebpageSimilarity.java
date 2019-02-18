@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class WebpageSimilarity {
-    public static void closestTo(ArrayList<HashTable> field, HashTable ht){
+    public static HashTable closestTo(ArrayList<HashTable> field, HashTable ht){
         HashTable closestTo = field.get(0);
         double highScore = 0;
         double score = 0;
@@ -33,6 +33,8 @@ public class WebpageSimilarity {
         }
         System.out.println("Score: " + highScore);
         System.out.println("Closest to " + closestTo.getUrl());
+
+        return closestTo;
     }
 
     private static double cosineD(double num, double den){
