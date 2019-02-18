@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
 
@@ -33,7 +34,10 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    outputPanel.populate(Main.createTable(inputPanel.textField.getText()));
+                    HashTable ht = URLReader.createTable(inputPanel.textField.getText());
+                    outputPanel.populate(ht);
+                    ArrayList<HashTable> tables = URLReader.readAll();
+                    WebpageSimilarity.closestTo(tables, ht);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

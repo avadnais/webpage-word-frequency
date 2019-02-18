@@ -1,5 +1,8 @@
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import javax.swing.*;
 
 public class Main {
@@ -18,21 +21,4 @@ public class Main {
 
     }
 
-    public static HashTable createTable(String url) throws Exception {
-
-        String webpageString = URLReader.read(url).replaceAll("[.,\"]", "");
-
-        HashTable ht = new HashTable();
-
-        List<String> words = Arrays.asList(webpageString.split(" "));
-
-        for(int i = 0; i < words.size(); i++) {
-            if(words.get(i).length() > 0)
-                ht.addOne(words.get(i));
-        }
-
-        ht.printAll();
-
-        return ht;
-    }
 }

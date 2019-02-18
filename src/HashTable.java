@@ -2,7 +2,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 class HashTable {
-    static final int INITIAL_CAP = (16);
 
     static final class Node {
 
@@ -18,32 +17,28 @@ class HashTable {
             this.next = next;
         }
     }
+    static final int INITIAL_CAP = (16);
+    String url;
     int count = 0;
     int resizes = 0;
     Node[] table = new Node[INITIAL_CAP];
 
     int hashCode(String word){
-        int hash = word.length();
-
-        for(int i = 0; i < word.length(); i++){
-            hash = (hash << 5) - hash;
-        }
-
-        return hash;
+        return word.hashCode() ^ word.length() * 31;
     }
 
     int get(String word) {
-        int h = word.hashCode();
+        int h = hashCode(word);
         int i = h & (this.table.length - 1);
         for (Node e = table[i]; e != null; e = e.next) {
-            if (h == e.word.hashCode() && e.word.equals(word))
+            if (h == hashCode(e.word) && e.word.equals(word))
                 return e.freq;
         }
         return -1;
     }
 
     void addOne(String word) {
-        int h = word.hashCode();
+        int h = hashCode(word);
         int i = h & (this.table.length - 1);
         for (Node e = table[i]; e != null; e = e.next) {
             if (word.equals(e.word)) {
@@ -67,7 +62,7 @@ class HashTable {
             Node list = table[i];
             while (list != null) {
                 Node next = list.next;
-                int h = list.word.hashCode();
+                int h = hashCode(list.word);
                 int j = h & (newtable.length - 1);
                 list.next = newtable[j];
                 newtable[j] = list;
@@ -98,13 +93,38 @@ class HashTable {
     Set<String> keySet(){
         Set<String> keys = new HashSet<String>();
         for(int i = 0; i < table.length; i++){
-            if(table[i] != null)
-                keys.add(table[i].word);
+            if(table[i] != null) {
+                for (Node e = table[i]; e != null; e = e.next) {
+                    keys.add(e.word);
+                }
+            }
         }
         return keys;
 
     }
 
+    int collisions(){
+
+        int collisions = 0;
+
+        for(int i = 0; i < table.length; i++){
+            if(table[i] != null){
+                for(Node e = table[i]; e != null; e = e.next){
+                    if(e.next != null)
+                        collisions++;
+                }
+            }
+        }
+        return collisions;
+    }
+
+    void setUrl(String url){
+        this.url = url;
+    }
+
+    String getUrl(){
+        return this.url;
+    }
 
   /*  public void writeObject(ObjectOutputStream s) throws IOException {
         //s.defaultWriteObject(this);

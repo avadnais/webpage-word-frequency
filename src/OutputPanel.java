@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.util.Set;
 
 public class OutputPanel extends JPanel {
 
@@ -14,30 +15,28 @@ public class OutputPanel extends JPanel {
         size.width = 250;
         size.height = 200;
         setPreferredSize(size);
-
+        setVisible(true);
 
     }
 
     public void populate(HashTable ht) {
         String[] headers = {"Word", "Frequency"};
-        data = new Object[ht.keySet().size()][2];
+        Set<String> keys= ht.keySet();
+        data = new Object[keys.size()][2];
 
-        int j = 0;
-        for (int i = 0; i < ht.table.length; i++) {
-            if (ht.table[i] != null) {
-                data[j][0] = ht.table[i].word;
-                data[j][1] = ht.table[i].freq;
-                j++;
-            }
+        int i = 0;
+        for (String key : keys) {
+            data[i][0] = key;
+            data[i][1] = ht.get(key);
+            i++;
         }
         table = new JTable(data, headers);
 
         table.setRowHeight(25);
 
-        table.setPreferredScrollableViewportSize(new Dimension(500, 400));
+        table.setPreferredScrollableViewportSize(new Dimension(400, 400));
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
-
         add(scrollPane);
     }
 }
