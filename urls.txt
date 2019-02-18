@@ -8,3 +8,16 @@ https://en.wikipedia.org/wiki/Hash_function
 https://en.wikipedia.org/wiki/Linear_probing
 https://en.wikipedia.org/wiki/Trie
 https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
+https://en.wikipedia.org/wiki/Doug_Lea
+https://en.wikipedia.org/wiki/Computer_science
+https://en.wikipedia.org/wiki/Elephant
+https://en.wikipedia.org/wiki/Monkey
+https://en.wikipedia.org/wiki/Fish
+https://en.wikipedia.org/wiki/Bird
+https://en.wikipedia.org/wiki/Amphibian
+https://en.wikipedia.org/wiki/Cooking
+https://en.wikipedia.org/wiki/Basketball
+https://en.wikipedia.org/wiki/Golf
+https://en.wikipedia.org/wiki/Baseball
+https://en.wikipedia.org/wiki/Cricket
+https://en.wikipedia.org/wiki/Football
