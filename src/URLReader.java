@@ -21,11 +21,11 @@ public class URLReader {
         Scanner sc = new Scanner(f);
         ArrayList<String> urlStrings = new ArrayList<>(10);
 
-        while(sc.hasNext()) urlStrings.add(sc.next());
+        while (sc.hasNext()) urlStrings.add(sc.next());
 
         ArrayList<HashTable> tables = new ArrayList<>(10);
 
-        for(String u : urlStrings) {
+        for (String u : urlStrings) {
             tables.add(createTable(u));
         }
 
@@ -47,8 +47,23 @@ public class URLReader {
         return ht;
     }
 
+    public static BTree createBtree(String url) throws Exception {
 
-    public static String read(String urlString) throws Exception{
+        BTree bt = new BTree();
+
+        String webpageString = URLReader.read(url).replaceAll("[.,\"]", "");
+        List<String> words = Arrays.asList(webpageString.split(" "));
+
+        for (int i = 0; i < words.size(); i++) {
+            if (words.get(i).length() > 0)
+                bt.insert(new WordCount(words.get(i)));
+        }
+
+        return bt;
+    }
+
+
+    public static String read(String urlString) throws Exception {
         System.out.println(urlString);
         URL url = new URL(urlString);
         BufferedReader in = new BufferedReader(
@@ -70,4 +85,12 @@ public class URLReader {
 
         return title + "\n" + body;
     }
+
+    public static void main(String[] args) throws Exception {
+        BTree bt = createBtree("https://en.wikipedia.org/wiki/Golf");
+
+        System.out.println(bt.totalNumberOfNodes);
+    }
+
+
 }
