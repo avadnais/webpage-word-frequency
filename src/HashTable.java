@@ -126,14 +126,4 @@ class HashTable {
         return this.url;
     }
 
-  /*  public void writeObject(ObjectOutputStream s) throws IOException {
-        //s.defaultWriteObject(this);
-
-        for(int i = 0; i < table.length; ++i){
-            for(Node p = table[i]; p != null; p = p.next){
-                s.write(p.name);
-                s.write(p.profile);
-            }
-        }
-    }*/
 }

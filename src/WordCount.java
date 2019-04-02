@@ -24,10 +24,21 @@ public class WordCount implements Comparable<WordCount>{
     }
 
     public int compareTo(WordCount w) {
+        return compareTo(w, 0);
+    }
 
-        if(word.charAt(0) == w.word.charAt(0)) return 0;
-        else if(word.charAt(0) > w.word.charAt(0)) return 0;
+    public int compareTo(WordCount w, int i){
+
+        if (i > w.getWord().length() - 1 && i > word.length() - 1)
+            return 0;
+        else if(i > w.getWord().length() - 1 ) return -1;
+        else if(i > word.length() - 1) return 1;
+
+        while(word.charAt(i) == w.word.charAt(i)) {
+            return compareTo(w, i + 1);
+        }
+
+        if(word.charAt(i) > w.getWord().charAt(i)) return 1;
         else return -1;
-
     }
 }

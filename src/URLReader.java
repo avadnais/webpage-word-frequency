@@ -88,6 +88,8 @@ public class URLReader {
 
         System.out.println(bt.search(bt.root, new WordCount("the")).getWord());
         System.out.println(bt.search(bt.root, new WordCount("the")).getCount());
+        System.out.println(bt.search(bt.root, new WordCount("birdie")).getWord());
+        System.out.println(bt.search(bt.root, new WordCount("birdie")).getCount());
 
         System.out.println(bt.totalNumberOfNodes);
     }

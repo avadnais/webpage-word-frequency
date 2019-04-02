@@ -97,16 +97,17 @@ public class BTree implements java.io.Serializable {
     void insert(WordCount w) throws Exception {
         Node r = root;
 
+            //need to split if full and insert into not full node
             if (root.currentNumberOfKeys == 2 * K - 1) {
                 totalNumberOfNodes++;
-                Node s = new Node(totalNumberOfNodes);
-                root = s;
-                s.leaf = 0;
-                s.currentNumberOfKeys = 0;
-                s.children[0] = r.nodeID;
-                s.currentNumberOfChildren++;
-                split(s, r);
-                insertNotFull(s, w);
+                Node newNode = new Node(totalNumberOfNodes);
+                root = newNode;
+                newNode.leaf = 0;
+                newNode.currentNumberOfKeys = 0;
+                newNode.children[0] = r.nodeID;
+                newNode.currentNumberOfChildren++;
+                split(newNode, r);
+                insertNotFull(newNode, w);
             } else {
                 insertNotFull(r, w);
             }
@@ -153,7 +154,7 @@ public class BTree implements java.io.Serializable {
         for (int i = 0; i < K - 1; i++) { //move second half of y's keys to to first half of z's keys
             z.keys[i] = y.keys[i + K];
             z.currentNumberOfKeys++; //just added a key, increment numKeys
-            y.keys[i + K] = null; ///this line might give some weird errors - for just keys it was y.keys[i + K] = 0
+            y.keys[i + K] = null;
             y.currentNumberOfKeys--;
         }
 
