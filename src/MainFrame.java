@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,10 +39,10 @@ public class MainFrame extends JFrame {
                     c.remove(outputPanel);
                     outputPanel = new OutputPanel();
                     HashTable ht = URLReader.createTable(inputPanel.textField.getText());
-                    outputPanel.populate(ht, outputPanel.table1);
+                    outputPanel.populateT1(ht);
                     ArrayList<HashTable> tables = URLReader.readAll();
                     HashTable closestTo = WebpageSimilarity.closestTo(tables, ht);
-                    outputPanel.populate(closestTo, outputPanel.table2);
+                    outputPanel.populateT2(closestTo);
                     c.add(outputPanel);
                     c.validate();
                 } catch (Exception e1) {

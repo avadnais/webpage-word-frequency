@@ -5,10 +5,7 @@ import java.net.*;
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class URLReader {
 
@@ -47,16 +44,14 @@ public class URLReader {
         return ht;
     }
 
-    public static BTree createBtree(String url) throws Exception {
+    public static BTree createBtree(HashTable ht) throws Exception {
+
+        List<String> keys = new ArrayList<String>(ht.keySet());
 
         BTree bt = new BTree();
 
-        String webpageString = URLReader.read(url).replaceAll("[.,\"]", "");
-        List<String> words = Arrays.asList(webpageString.split(" "));
-
-        for (int i = 0; i < words.size(); i++) {
-            if (words.get(i).length() > 0)
-                bt.insert(new WordCount(words.get(i)));
+        for (int i = 0; i < keys.size(); i++) {
+            bt.insert(new WordCount(keys.get(i), ht.get(keys.get(i))));
         }
 
         return bt;
@@ -87,7 +82,12 @@ public class URLReader {
     }
 
     public static void main(String[] args) throws Exception {
-        BTree bt = createBtree("https://en.wikipedia.org/wiki/Golf");
+        BTree bt = createBtree(createTable("https://en.wikipedia.org/wiki/Golf"));
+
+        bt.writeRoot();
+
+        System.out.println(bt.search(bt.root, new WordCount("the")).getWord());
+        System.out.println(bt.search(bt.root, new WordCount("the")).getCount());
 
         System.out.println(bt.totalNumberOfNodes);
     }

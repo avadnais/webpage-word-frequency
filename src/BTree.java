@@ -8,7 +8,7 @@ public class BTree implements java.io.Serializable {
 
     static final String btreeFile = "btree/btree.txt"; //file to keep track of B tree root and constants
     static final String nodesFile = "btree/nodes.txt";
-    static final int K = 8;  //constant used throughout the entire Btree
+    static final int K = 16;  //constant used throughout the entire Btree
     static final int nodeSize = 2047; // to keep track of where different nodes are in the file
     Node root;
     int totalNumberOfNodes;
@@ -46,7 +46,7 @@ public class BTree implements java.io.Serializable {
     WordCount search(Node n, WordCount w) throws Exception {
         int i = 0;
 
-        while (i < n.currentNumberOfKeys -1 && w.compareTo(n.keys[i]) > 0) {
+        while (i < n.currentNumberOfKeys - 1 && w.compareTo(n.keys[i]) > 0) {
             i++;
         }
 
@@ -56,7 +56,7 @@ public class BTree implements java.io.Serializable {
             return null;
         } else {
             //searchCluster the appropriate child node and searchCluster it
-            if (w.compareTo(n.keys[i]) < 0){
+            if (w.compareTo(n.keys[i]) < 0) {
                 if (n.children[i] != 0) {
                     return search(read(n.children[i]), w);
                 } else {
@@ -65,17 +65,17 @@ public class BTree implements java.io.Serializable {
                 }
             } else {
                 //look at child node with biggest value
-                return search(read(n.children[i+1]), w);
+                return search(read(n.children[i + 1]), w);
             }
 
         }
     }
 
-    boolean contains(Node n, WordCount w) throws Exception{
+    boolean contains(Node n, WordCount w) throws Exception {
         int i = 0;
 
         //this below works for everything except if the WordFreq value is at the far right end of the child nodes
-        while (i < n.currentNumberOfKeys - 1  && w.compareTo(n.keys[i]) > 1) {
+        while (i < n.currentNumberOfKeys - 1 && w.compareTo(n.keys[i]) > 1) {
             i++;
         }
         //just look to see if id matches (easier to searchCluster that way)
@@ -88,7 +88,7 @@ public class BTree implements java.io.Serializable {
             if (w.compareTo(n.keys[i]) < 0) {
                 return contains(read(n.children[i]), w);
             } else {
-                return contains(read(n.children[i+1]), w);
+                return contains(read(n.children[i + 1]), w);
             }
         }
     }
@@ -96,25 +96,26 @@ public class BTree implements java.io.Serializable {
 
     void insert(WordCount w) throws Exception {
         Node r = root;
-        if (root.currentNumberOfKeys == 2 * K - 1) {
-            totalNumberOfNodes++;
-            Node s = new Node(totalNumberOfNodes);
-            root = s;
-            s.leaf = 0;
-            s.currentNumberOfKeys = 0;
-            s.children[0] = r.nodeID;
-            s.currentNumberOfChildren++;
-            split(s, r);
-            insertNotFull(s, w);
-        } else {
-            insertNotFull(r, w);
-        }
+
+            if (root.currentNumberOfKeys == 2 * K - 1) {
+                totalNumberOfNodes++;
+                Node s = new Node(totalNumberOfNodes);
+                root = s;
+                s.leaf = 0;
+                s.currentNumberOfKeys = 0;
+                s.children[0] = r.nodeID;
+                s.currentNumberOfChildren++;
+                split(s, r);
+                insertNotFull(s, w);
+            } else {
+                insertNotFull(r, w);
+            }
     }
 
 
     void insertNotFull(Node x, WordCount w) throws Exception {
 
-        int i = x.currentNumberOfKeys-1;
+        int i = x.currentNumberOfKeys - 1;
         if (x.leaf == 1) {
             while (i > -1 && w.compareTo(x.keys[i]) < 0) {
                 x.keys[i + 1] = x.keys[i];
@@ -197,11 +198,11 @@ public class BTree implements java.io.Serializable {
     }
 
     //write root info to btree file
-    void writeRoot() throws IOException{
+    void writeRoot() throws IOException {
         RandomAccessFile btf = new RandomAccessFile(btreeFile, "rw");
         btf.seek(0);
         FileChannel fc = btf.getChannel();
-        ByteBuffer bb = ByteBuffer.allocate(nodeSize*2);
+        ByteBuffer bb = ByteBuffer.allocate(nodeSize * 2);
 
         //write total number of nodes to the file
         bb.putInt(totalNumberOfNodes);
@@ -210,12 +211,12 @@ public class BTree implements java.io.Serializable {
         bb.putLong(root.nodeID);
 
         bb.putInt(root.currentNumberOfKeys);
-        for (int i = 0; i<root.currentNumberOfKeys; i++){
+        for (int i = 0; i < root.currentNumberOfKeys; i++) {
 
             WordCount current = root.keys[i];
 
             //write the name of the current WordFreq
-            byte [] name = current.getWord().getBytes();
+            byte[] name = current.getWord().getBytes();
             bb.putInt(name.length);
             bb.put(name);
 
@@ -225,7 +226,7 @@ public class BTree implements java.io.Serializable {
         }
 
         bb.putInt(root.currentNumberOfChildren);
-        for (int i = 0; i<root.currentNumberOfChildren; i++){
+        for (int i = 0; i < root.currentNumberOfChildren; i++) {
             bb.putLong(root.children[i]);
         }
 
@@ -240,10 +241,10 @@ public class BTree implements java.io.Serializable {
     }
 
 
-    void write(Node n) throws IOException{
-        try{
+    void write(Node n) throws IOException {
+        try {
             RandomAccessFile file = new RandomAccessFile(nodesFile, "rw");
-            file.seek(n.nodeID*nodeSize);
+            file.seek(n.nodeID * nodeSize);
             FileChannel fc = file.getChannel();
             ByteBuffer bb = ByteBuffer.allocate(nodeSize);
 
@@ -251,12 +252,12 @@ public class BTree implements java.io.Serializable {
             bb.putLong(n.nodeID);
 
             bb.putInt(n.currentNumberOfKeys);
-            for (int i = 0; i<n.currentNumberOfKeys; i++){
+            for (int i = 0; i < n.currentNumberOfKeys; i++) {
 
                 WordCount current = n.keys[i];
 
                 //write the name of the current yelp object
-                byte [] name = current.getWord().getBytes();
+                byte[] name = current.getWord().getBytes();
                 bb.putInt(name.length);
                 bb.put(name);
 
@@ -265,7 +266,7 @@ public class BTree implements java.io.Serializable {
             }
 
             bb.putInt(n.currentNumberOfChildren);
-            for (int i = 0; i<n.currentNumberOfChildren; i++){
+            for (int i = 0; i < n.currentNumberOfChildren; i++) {
                 bb.putLong(n.children[i]);
             }
 
@@ -282,13 +283,13 @@ public class BTree implements java.io.Serializable {
     }
 
 
-    static BTree readRoot() throws Exception{
+    static BTree readRoot() throws Exception {
         try {
             Node temp = new Node(0);
             RandomAccessFile btf = new RandomAccessFile(btreeFile, "rw");
             btf.seek(0);
             FileChannel fc = btf.getChannel();
-            ByteBuffer bb = ByteBuffer.allocate(nodeSize *2);
+            ByteBuffer bb = ByteBuffer.allocate(nodeSize * 2);
             fc.read(bb);
             bb.flip();
 
@@ -300,7 +301,7 @@ public class BTree implements java.io.Serializable {
             temp.nodeID = bb.getLong();
 
             temp.currentNumberOfKeys = bb.getInt(); //recover keys
-            for (int i = 0; i< temp.currentNumberOfKeys; i++) {
+            for (int i = 0; i < temp.currentNumberOfKeys; i++) {
                 //recover all info that was written for every single
                 // yelpdate iobject that was puyt ibn the nodes
                 //make sure to refcord the number of byte in the byte buffer so i know
@@ -310,7 +311,7 @@ public class BTree implements java.io.Serializable {
 
                 //read name
                 int wordLen = bb.getInt();
-                byte [] wordBuf = new byte[wordLen];
+                byte[] wordBuf = new byte[wordLen];
                 bb.get(wordBuf);
                 String word = new String(wordBuf);
 
@@ -320,7 +321,7 @@ public class BTree implements java.io.Serializable {
             }
 
             temp.currentNumberOfChildren = bb.getInt(); //recover children
-            for (int i = 0; i<temp.currentNumberOfChildren; i++){
+            for (int i = 0; i < temp.currentNumberOfChildren; i++) {
                 temp.children[i] = bb.getLong();
             }
 
@@ -337,12 +338,12 @@ public class BTree implements java.io.Serializable {
 
 
     //returns a node full of WordFreq objects
-    Node read(long x) throws Exception{
+    Node read(long x) throws Exception {
         try {
 
             Node temp = new Node(0);
             RandomAccessFile file = new RandomAccessFile(nodesFile, "rw");
-            file.seek(x*nodeSize);
+            file.seek(x * nodeSize);
             FileChannel fc = file.getChannel();
             ByteBuffer bb = ByteBuffer.allocate(nodeSize);
             fc.read(bb);
@@ -351,9 +352,9 @@ public class BTree implements java.io.Serializable {
             temp.nodeID = bb.getLong();
 
             temp.currentNumberOfKeys = bb.getInt(); //recover keys
-            for (int i = 0; i< temp.currentNumberOfKeys; i++) {
+            for (int i = 0; i < temp.currentNumberOfKeys; i++) {
                 //recover all info that was written for every single
-                // yelpdate iobject that was puyt ibn the nodes
+                // wordcount object that was puyt ibn the nodes
                 //make sure to refcord the number of byte in the byte buffer so i know
                 //when to stop reading and not to get an overflow
                 //WordFreq w = new WordFreq(null, null, null, 0, 0); // crashes because itll try to do math.abs(null) for int hash
@@ -361,7 +362,7 @@ public class BTree implements java.io.Serializable {
 
                 //read name
                 int wordLen = bb.getInt();
-                byte [] wordBuf = new byte[wordLen];
+                byte[] wordBuf = new byte[wordLen];
                 bb.get(wordBuf);
                 String word = new String(wordBuf);
 
@@ -374,7 +375,7 @@ public class BTree implements java.io.Serializable {
             }
 
             temp.currentNumberOfChildren = bb.getInt(); //recover children
-            for (int i = 0; i<temp.currentNumberOfChildren; i++){
+            for (int i = 0; i < temp.currentNumberOfChildren; i++) {
                 temp.children[i] = bb.getLong();
             }
 
@@ -383,7 +384,7 @@ public class BTree implements java.io.Serializable {
             file.close();
             return temp;
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
