@@ -1,4 +1,5 @@
 .idea/
 .DS_store
 /out
-/btree/*
+btree/*
+!btree/.gitkeep
